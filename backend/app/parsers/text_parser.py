@@ -1,4 +1,19 @@
-from pathlib import Path
-class TextParser:
-    def parse(self,file_path:str):
-        return Path(file_path).read_text(encoding='utf-8')
+"""
+Parser for plain text (.txt) files.
+"""
+
+from parsers.base import BaseParser, ParsedDocument
+
+
+class TxtParser(BaseParser):
+    source_type = "txt"
+
+    def parse(self, file_bytes: bytes, filename: str) -> ParsedDocument:
+        text = file_bytes.decode("utf-8", errors="replace")
+
+        return ParsedDocument(
+            title=filename,
+            raw_text=text,
+            source_type=self.source_type,
+            sections=[{"heading": filename, "text": text.strip()}],
+        )
