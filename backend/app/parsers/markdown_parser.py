@@ -1,10 +1,9 @@
 """
 Parser for Markdown files.
-Extracts headings as section boundaries.
 """
 
 import re
-from parsers.base import BaseParser, ParsedDocument
+from app.parsers.base import BaseParser, ParsedDocument
 
 
 class MarkdownParser(BaseParser):
@@ -13,7 +12,6 @@ class MarkdownParser(BaseParser):
     def parse(self, file_bytes: bytes, filename: str) -> ParsedDocument:
         text = file_bytes.decode("utf-8", errors="replace")
 
-        # Split on headings (# / ## / ###)
         heading_pattern = re.compile(r"^(#{1,6})\s+(.+)$", re.MULTILINE)
         matches = list(heading_pattern.finditer(text))
 
@@ -29,10 +27,7 @@ class MarkdownParser(BaseParser):
                 if body:
                     sections.append({"heading": heading_text, "text": body})
 
-        # Derive title from first H1 or filename
-        first_h1 = next(
-            (m.group(2) for m in matches if m.group(1) == "#"), None
-        )
+        first_h1 = next((m.group(2) for m in matches if m.group(1) == "#"), None)
         title = first_h1 or filename
 
         return ParsedDocument(

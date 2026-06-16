@@ -1,5 +1,5 @@
 """
-Gemini API integration.
+Gemini API integration using google-genai SDK.
 
 STRICT CONTRACT:
   Gemini is ONLY used for:
@@ -9,10 +9,15 @@ STRICT CONTRACT:
 
   Gemini NEVER performs retrieval. All retrieval is done by FAISS + reranker.
 """
-
 from __future__ import annotations
 
-import google.generativeai as genai
+import ssl
+ssl._create_default_https_context = ssl._create_unverified_context
+
+
+from google import genai
+from google.genai import types
+
 
 SYNTHESIS_SYSTEM = """You are a memory assistant. Your job is to help users understand information they have previously encountered.
 
@@ -31,19 +36,10 @@ class GeminiClient:
     def __init__(self, api_key: str, model_name: str = "gemini-1.5-flash"):
         if not api_key:
             raise ValueError("GEMINI_API_KEY is not set.")
-        genai.configure(api_key=api_key)
-        self.model = genai.GenerativeModel(
-            model_name=model_name,
-            system_instruction=SYNTHESIS_SYSTEM,
-        )
+        self.client = genai.Client(api_key=api_key)        
         self.model_name = model_name
 
     def synthesize_answer(self, query: str, memory_chunks: list[dict]) -> str:
-        """
-        Generate an answer from retrieved memory chunks.
-
-        memory_chunks: list of {"content": str, "source": str, "score": float}
-        """
         if not memory_chunks:
             return "No relevant memories found for this query."
 
@@ -57,32 +53,40 @@ class GeminiClient:
         prompt = f"Question: {query}\n\nMemories:\n{context}\n\nAnswer:"
 
         try:
-            response = self.model.generate_content(prompt)
+            response = self.client.models.generate_content(
+                model=self.model_name,
+                contents=prompt,
+                config=types.GenerateContentConfig(
+                    system_instruction=SYNTHESIS_SYSTEM,
+                ),
+            )
             return response.text.strip()
         except Exception as e:
             return f"Error generating answer: {str(e)}"
 
     def summarize_memories(self, chunks: list[str]) -> str:
-        """Summarize a list of memory text chunks."""
-        model = genai.GenerativeModel(
-            model_name=self.model_name,
-            system_instruction=SUMMARY_SYSTEM,
-        )
-        combined = "\n\n".join(chunks[:10])  # cap to 10 chunks
+        combined = "\n\n".join(chunks[:10])
         try:
-            response = model.generate_content(combined)
+            response = self.client.models.generate_content(
+                model=self.model_name,
+                contents=combined,
+                config=types.GenerateContentConfig(
+                    system_instruction=SUMMARY_SYSTEM,
+                ),
+            )
             return response.text.strip()
         except Exception as e:
             return f"Error: {str(e)}"
 
     def generate_topics(self, text: str) -> list[str]:
-        """Generate topic labels for a piece of text."""
-        model = genai.GenerativeModel(
-            model_name=self.model_name,
-            system_instruction=TOPICS_SYSTEM,
-        )
         try:
-            response = model.generate_content(text[:2000])
+            response = self.client.models.generate_content(
+                model=self.model_name,
+                contents=text[:2000],
+                config=types.GenerateContentConfig(
+                    system_instruction=TOPICS_SYSTEM,
+                ),
+            )
             lines = [l.strip() for l in response.text.strip().splitlines() if l.strip()]
             return lines[:5]
         except Exception:

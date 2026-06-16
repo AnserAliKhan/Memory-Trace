@@ -2,7 +2,7 @@
 Parser for plain text (.txt) files.
 """
 
-from parsers.base import BaseParser, ParsedDocument
+from app.parsers.base import BaseParser, ParsedDocument
 
 
 class TxtParser(BaseParser):

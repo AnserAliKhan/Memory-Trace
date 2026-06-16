@@ -1,0 +1,27 @@
+# Environment
+.env
+*.env
+
+# Python
+__pycache__/
+*.pyc
+venv/
+*.egg-info/
+
+# FAISS index
+*.index
+*.npy
+
+# DB
+*.db
+
+# Node
+node_modules/
+dist/
+.next/
+
+# OS
+.DS_Store
+Thumbs.db
+backend/.env
+backend/.env

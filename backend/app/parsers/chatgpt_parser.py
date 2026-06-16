@@ -1,25 +1,9 @@
 """
 Parser for ChatGPT conversation export JSON.
-
-The export format is a list of conversation objects:
-[
-  {
-    "title": "...",
-    "create_time": ...,
-    "mapping": {
-      "<uuid>": {
-        "message": {
-          "author": {"role": "user"|"assistant"|"system"},
-          "content": {"parts": ["..."]}
-        }
-      }
-    }
-  }
-]
 """
 
 import json
-from parsers.base import BaseParser, ParsedDocument
+from app.parsers.base import BaseParser, ParsedDocument
 
 
 class ChatGPTParser(BaseParser):
