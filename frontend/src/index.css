@@ -1,0 +1,26 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Global background that respects the theme token */
+html,
+body,
+#root {
+  background-color: var(--color-canvas);
+  min-height: 100vh;
+}
+
+body {
+  color: var(--color-cream);
+  font-family: 'Inter', system-ui, sans-serif;
+}
+
+@keyframes searchGlow {
+  0%   { opacity: 0.0; transform: scale(1.0); }
+  50%  { opacity: 1.0; transform: scale(1.15); }
+  100% { opacity: 0.0; transform: scale(1.3); }
+}
+
+.search-glow-active {
+  animation: searchGlow 1.4s ease-in-out infinite;
+}

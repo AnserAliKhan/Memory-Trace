@@ -1,0 +1,57 @@
+  :root {
+    /* ── Surfaces ── */
+    --color-canvas:      #100904;
+    --color-surface:     #1a1410;
+    --color-raised:      #231c16;
+    --color-border:      #2e2520;
+    --color-border-dim:  #1e1a15;
+
+    /* ── Text ── */
+    --color-cream:       #ffedd7;
+    --color-muted:       #6c5f51;
+    --color-dim:         #3d332a;
+
+    /* ── Accent ── */
+    --color-amber:       #e8a838;
+    --color-amber-glow:  rgba(232, 168, 56, 0.08);
+    --color-amber-dim:   #2a1e00;
+
+    /* ── Semantic ── */
+    --color-success:     #5a8a5a;
+    --color-error:       #8a4a3a;
+
+    /* ── Spacing (as CSS custom properties as well) ── */
+    --space-1:  4px;
+    --space-2:  8px;
+    --space-3:  12px;
+    --space-4:  16px;
+    --space-5:  20px;
+    --space-6:  24px;
+    --space-8:  32px;
+    --space-10: 40px;
+    --space-12: 48px;
+    --space-16: 64px;
+    --space-20: 80px;
+    --space-24: 96px;
+
+    --layout-max:      1100px;
+    --layout-padding:  24px;
+    --section-gap:     96px;
+
+    --radius-sm:   4px;
+    --radius-md:   8px;
+    --radius-lg:   12px;
+    --radius-pill: 9999px;
+  }
+
+  /* Light mode overrides (will be toggled later) */
+  [data-theme="light"] {
+    --color-canvas:     #f5f0e8;
+    --color-surface:    #ffffff;
+    --color-raised:     #ede8df;
+    --color-border:     #d4cdc2;
+    --color-border-dim: #e8e2d8;
+    --color-cream:      #1a1410;
+    --color-muted:      #7a6e60;
+    --color-dim:        #b0a89a;
+  }
