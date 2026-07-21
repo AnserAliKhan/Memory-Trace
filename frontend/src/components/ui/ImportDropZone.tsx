@@ -64,7 +64,7 @@ export function ImportDropZone({ onUpload, isUploading = false }: ImportDropZone
         {isUploading ? 'Uploading...' : 'Drop your file here, or click to browse'}
       </p>
       <p className="text-body-sm text-muted mt-2">
-        .md .txt .pdf .json .png .jpg .gif .webp .bmp
+        .md .txt .pdf .json .png .jpg .gif .webp .bmp (ChatGPT/Claude export)
       </p>
     </div>
   );

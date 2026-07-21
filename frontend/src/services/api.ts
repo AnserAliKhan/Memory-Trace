@@ -91,6 +91,28 @@ export async function importFile(
 }
 
 /**
+ * Import from a shared conversation URL.
+ * POST /api/documents/import-url
+ */
+export async function importUrl(
+  baseUrl: string,
+  url: string
+): Promise<ImportResponse> {
+  const res = await fetch(`${baseUrl}/api/documents/import-url`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ url }),
+  });
+
+  if (!res.ok) {
+    const errorText = await res.text();
+    throw new Error(errorText || 'URL import failed');
+  }
+
+  return res.json();
+}
+
+/**
  * List all imported documents.
  * GET /api/documents/
  */
