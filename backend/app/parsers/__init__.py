@@ -1,4 +1,5 @@
 from app.parsers.chatgpt_parser import ChatGPTParser
+from app.parsers.image_parser import ImageParser
 from app.parsers.markdown_parser import MarkdownParser
 from app.parsers.pdf_parser import PDFParser
 from app.parsers.text_parser import TxtParser
@@ -6,6 +7,7 @@ from app.parsers.base import BaseParser
 
 PARSER_MAP: dict[str, type[BaseParser]] = {
     "chatgpt": ChatGPTParser,
+    "image": ImageParser,
     "markdown": MarkdownParser,
     "txt": TxtParser,
     "pdf": PDFParser,
@@ -17,6 +19,12 @@ EXT_MAP: dict[str, str] = {
     ".markdown": "markdown",
     ".txt": "txt",
     ".pdf": "pdf",
+    ".png": "image",
+    ".jpg": "image",
+    ".jpeg": "image",
+    ".gif": "image",
+    ".webp": "image",
+    ".bmp": "image",
 }
 
 

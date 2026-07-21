@@ -66,7 +66,7 @@ export default function Import() {
         {/* Page header */}
         <h1 className="text-display font-display font-bold text-cream mb-2">Import</h1>
         <p className="text-body text-muted mb-8">
-          Supported formats: .md .txt .pdf .json (ChatGPT export)
+          Supported formats: .md .txt .pdf .json .png .jpg .gif .webp .bmp
         </p>
 
         {/* Drop zone */}
