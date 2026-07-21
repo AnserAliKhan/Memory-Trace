@@ -39,9 +39,9 @@ class GeminiClient:
         self.client = genai.Client(api_key=api_key)        
         self.model_name = model_name
 
-    def synthesize_answer(self, query: str, memory_chunks: list[dict]) -> str:
+    def _build_synthesis_prompt(self, query: str, memory_chunks: list[dict]) -> str:
         if not memory_chunks:
-            return "No relevant memories found for this query."
+            raise ValueError("No memory chunks provided")
 
         context_parts = []
         for i, chunk in enumerate(memory_chunks, 1):
@@ -50,7 +50,13 @@ class GeminiClient:
             context_parts.append(f"[Memory {i}] (Source: {source})\n{content}")
 
         context = "\n\n---\n\n".join(context_parts)
-        prompt = f"Question: {query}\n\nMemories:\n{context}\n\nAnswer:"
+        return f"Question: {query}\n\nMemories:\n{context}\n\nAnswer:"
+
+    def synthesize_answer(self, query: str, memory_chunks: list[dict]) -> str:
+        if not memory_chunks:
+            return "No relevant memories found for this query."
+
+        prompt = self._build_synthesis_prompt(query, memory_chunks)
 
         try:
             response = self.client.models.generate_content(
@@ -63,6 +69,27 @@ class GeminiClient:
             return response.text.strip()
         except Exception as e:
             return f"Error generating answer: {str(e)}"
+
+    def synthesize_answer_stream(self, query: str, memory_chunks: list[dict]):
+        if not memory_chunks:
+            yield "No relevant memories found for this query."
+            return
+
+        prompt = self._build_synthesis_prompt(query, memory_chunks)
+
+        try:
+            stream = self.client.models.generate_content_stream(
+                model=self.model_name,
+                contents=prompt,
+                config=types.GenerateContentConfig(
+                    system_instruction=SYNTHESIS_SYSTEM,
+                ),
+            )
+            for chunk in stream:
+                if chunk.text:
+                    yield chunk.text
+        except Exception as e:
+            yield f"Error generating answer: {str(e)}"
 
     def summarize_memories(self, chunks: list[str]) -> str:
         combined = "\n\n".join(chunks[:10])
