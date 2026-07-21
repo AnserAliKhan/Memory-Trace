@@ -1,6 +1,7 @@
 from app.parsers.chatgpt_parser import ChatGPTParser
 from app.parsers.chatgpt_share_parser import ChatGPTShareParser
 from app.parsers.claude_parser import ClaudeJsonParser, ClaudeShareParser
+from app.parsers.image_parser import ImageParser
 from app.parsers.markdown_parser import MarkdownParser
 from app.parsers.pdf_parser import PDFParser
 from app.parsers.text_parser import TxtParser
@@ -13,6 +14,7 @@ PARSER_MAP: dict[str, type[BaseParser]] = {
     "chatgpt_share": ChatGPTShareParser,
     "claude": ClaudeJsonParser,
     "claude_share": ClaudeShareParser,
+    "image": ImageParser,
     "markdown": MarkdownParser,
     "txt": TxtParser,
     "pdf": PDFParser,
@@ -24,6 +26,12 @@ EXT_MAP: dict[str, str] = {
     ".markdown": "markdown",
     ".txt": "txt",
     ".pdf": "pdf",
+    ".png": "image",
+    ".jpg": "image",
+    ".jpeg": "image",
+    ".gif": "image",
+    ".webp": "image",
+    ".bmp": "image",
 }
 
 SHARE_PARSER_MAP: dict[str, type[ChatGPTShareParser | ClaudeShareParser]] = {

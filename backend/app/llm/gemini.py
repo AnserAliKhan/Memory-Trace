@@ -32,6 +32,14 @@ SUMMARY_SYSTEM = """Summarize the following memory excerpts in 2-3 sentences. Fo
 TOPICS_SYSTEM = """Given the following text, generate 3-5 short topic labels (2-4 words each) that describe what the content is about. Return only the labels, one per line."""
 
 
+IMAGE_DESCRIPTION_PROMPT = """Describe this image in detail. Include:
+- What the image shows (objects, people, scenes, text)
+- Any visible text or writing (transcribe it exactly)
+- Key details that would help someone search for this image later
+
+Return only the description, no preamble."""
+
+
 class GeminiClient:
     def __init__(self, api_key: str, model_name: str = "gemini-1.5-flash"):
         if not api_key:
@@ -90,6 +98,17 @@ class GeminiClient:
                     yield chunk.text
         except Exception as e:
             yield f"Error generating answer: {str(e)}"
+
+    def describe_image(self, image_bytes: bytes, mime_type: str, filename: str) -> str:
+        image_part = types.Part.from_bytes(data=image_bytes, mime_type=mime_type)
+        try:
+            response = self.client.models.generate_content(
+                model=self.model_name,
+                contents=[image_part, IMAGE_DESCRIPTION_PROMPT],
+            )
+            return response.text.strip()
+        except Exception as e:
+            return f"[Image: {filename}] Error describing image: {str(e)}"
 
     def summarize_memories(self, chunks: list[str]) -> str:
         combined = "\n\n".join(chunks[:10])
