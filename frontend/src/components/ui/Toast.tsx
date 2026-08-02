@@ -1,5 +1,5 @@
 import { useEffect } from 'react';
-import { motion, AnimatePresence } from 'motion/react';
+import { motion } from 'motion/react';
 
 export type ToastType = 'success' | 'error';
 
