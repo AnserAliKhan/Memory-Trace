@@ -38,6 +38,10 @@ class Settings(BaseSettings):
 
     # CORS
     frontend_origin: str = "http://localhost:5173"
+    # Hosted frontend previews (Cloudflare Pages: <project>.pages.dev and
+    # <branch-or-hash>.<project>.pages.dev) calling this backend on localhost.
+    # Keep it anchored to our project so other sites can't read the local API.
+    cors_origin_regex: str = r"^https://([a-z0-9-]+\.)?refound\.pages\.dev$"
 
 
 @lru_cache()

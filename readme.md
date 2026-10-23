@@ -131,6 +131,14 @@ docker-compose up --build
 
 ---
 
+## Deployment (prod, PR previews, UAT)
+
+The frontend is hosted on Cloudflare Pages: production from `main`, a preview per PR, and a
+UAT site with all open PRs merged together. The backend runs on each tester's machine. See
+[docs/DEPLOYMENT.md](docs/DEPLOYMENT.md).
+
+---
+
 ## Testing
 
 ```bash
