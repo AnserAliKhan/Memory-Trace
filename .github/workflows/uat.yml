@@ -26,7 +26,7 @@ concurrency:
 
 jobs:
   assemble:
-    if: github.repository == 'mrkhan3870/Memory-Trace-'
+    if: github.repository == 'AnserAliKhan/Memory-Trace'
     runs-on: ubuntu-latest
     timeout-minutes: 10
     steps:
