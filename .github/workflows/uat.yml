@@ -1,0 +1,49 @@
+# Rebuilds the `uat` branch = main + every eligible open PR (last push wins on
+# conflicts). Cloudflare Pages deploys the branch to https://uat.<project>.pages.dev.
+# See docs/DEPLOYMENT.md.
+#
+# Security: pull_request_target runs this file and the script from main, never
+# from the PR, and the job only merges commits — it never builds or runs PR code.
+# Do not add steps that check out or execute the PR's code here.
+name: UAT
+
+on:
+  pull_request_target:
+    branches: [main]
+    types: [opened, reopened, synchronize, closed, ready_for_review, converted_to_draft, labeled, unlabeled, edited]
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: write       # push the uat branch
+  statuses: write       # "uat" commit status on each PR head
+  pull-requests: write  # sticky comment, drop the uat label on untrusted pushes
+
+concurrency:
+  group: uat
+  cancel-in-progress: true
+
+jobs:
+  assemble:
+    if: github.repository == 'mrkhan3870/Memory-Trace-'
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: main
+          fetch-depth: 0
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Assemble and push uat
+        env:
+          GH_TOKEN: ${{ github.token }}
+          REPO: ${{ github.repository }}
+          PAGES_PROJECT: ${{ vars.PAGES_PROJECT }}
+          EVENT_ACTION: ${{ github.event.action }}
+          EVENT_PR_NUMBER: ${{ github.event.pull_request.number }}
+        run: python .github/scripts/assemble_uat.py

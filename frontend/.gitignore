@@ -22,3 +22,6 @@ dist-ssr
 *.njsproj
 *.sln
 *.sw?
+
+# Generated on the `uat` branch by .github/scripts/assemble_uat.py
+public/uat-manifest.json

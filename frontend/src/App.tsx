@@ -3,6 +3,7 @@ import { AnimatePresence } from 'motion/react';
 import { useRef, useEffect, useState } from 'react';
 import { PageTransition } from './components/layout/PageTransition';
 import { CurtainTransition } from './components/layout/CurtainTransition';
+import { EnvBanner } from './components/ui/EnvBanner';
 
 // Page imports
 import Landing from './pages/Landing';
@@ -54,6 +55,7 @@ function App() {
   return (
     <BrowserRouter>
       <AppRoutes />
+      <EnvBanner />
     </BrowserRouter>
   );
 }
